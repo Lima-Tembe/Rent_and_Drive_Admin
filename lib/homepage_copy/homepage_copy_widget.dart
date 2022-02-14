@@ -1,6 +1,10 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
 import '../add_car/add_car_widget.dart';
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../login/login_widget.dart';
@@ -8,7 +12,6 @@ import '../statitics/statitics_widget.dart';
 import '../view_car/view_car_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HomepageCopyWidget extends StatefulWidget {
   const HomepageCopyWidget({Key key}) : super(key: key);
@@ -19,6 +22,7 @@ class HomepageCopyWidget extends StatefulWidget {
 
 class _HomepageCopyWidgetState extends State<HomepageCopyWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  var qrcodeData = '';
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,38 @@ class _HomepageCopyWidgetState extends State<HomepageCopyWidget> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [],
+        actions: [
+          FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30,
+            borderWidth: 1,
+            buttonSize: 60,
+            icon: Icon(
+              Icons.qr_code_scanner,
+              color: Colors.white,
+              size: 30,
+            ),
+            onPressed: () async {
+              await scanQRcode();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  qrcodeData == "invoice.info.number"
+                      ? "Recibo válido"
+                      : "Recibo inválido",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+                duration: Duration(milliseconds: 5000),
+                backgroundColor: qrcodeData == "invoice.info.number"
+                    ? Colors.green
+                    : Colors.redAccent,
+              ));
+              setState(() {});
+            },
+          ),
+        ],
         centerTitle: true,
         elevation: 2,
       ),
@@ -357,5 +392,22 @@ class _HomepageCopyWidgetState extends State<HomepageCopyWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> scanQRcode() async {
+    try {
+      final qrcodeData = await FlutterBarcodeScanner.scanBarcode(
+        "#333366",
+        "Cancelar",
+        true,
+        ScanMode.QR,
+      );
+      if (!mounted) return;
+      setState(() {
+        this.qrcodeData = qrcodeData;
+      });
+    } on PlatformException {
+      qrcodeData = '';
+    }
   }
 }

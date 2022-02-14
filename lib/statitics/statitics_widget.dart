@@ -3,12 +3,19 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class StatiticsWidget extends StatefulWidget {
-  const StatiticsWidget({Key key}) : super(key: key);
+  const StatiticsWidget({
+    Key key,
+    this.userRef,
+    this.rentRef,
+    this.carRef,
+  }) : super(key: key);
+
+  final UsersRecord userRef;
+  final ReservasRecord rentRef;
+  final CarsRecord carRef;
 
   @override
   _StatiticsWidgetState createState() => _StatiticsWidgetState();
@@ -46,7 +53,48 @@ class _StatiticsWidgetState extends State<StatiticsWidget> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        actions: [],
+        actions: [
+          /* FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30,
+            borderWidth: 1,
+            buttonSize: 60,
+            icon: Icon(
+              Icons.download_rounded,
+              color: Color(0xFF141414),
+              size: 30,
+            ),
+            onPressed: () async {
+              print('IconButton pressed ...');
+              final invoice = Invoice(
+                  supplier: Supplier(
+                    name: 'Rent & Drive',
+                    address: 'ISCTEM',
+                  ),
+                  customer: Customer(
+                    name: currentUserDocument?.displayName,
+                    address: currentUserDocument?.email,
+                  ),
+                  info: InvoiceInfo(
+                    date: currentUserDocument.createdTime,
+                    description: 'As estatisticas...',
+                    number: '${currentUserDocument.createdTime.microsecond}',
+                  ),
+                  items: [
+                    InvoiceItem(
+                      name: "widget.userRef.displayName",
+                      car: "widget.carRef.name",
+                      email: "widget.userRef.email",
+                      days: 3,
+                    )
+                  ]);
+
+              final pdfFile = await PdfInvoiceApi.generate(invoice);
+
+              PdfApi.openFile(pdfFile);
+            },
+          ),*/
+        ],
         centerTitle: false,
         elevation: 0,
       ),
